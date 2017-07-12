@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "homepage" : "dist/",
+  "homepage": "dist/",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "babel src --source-maps --out-dir dist",
@@ -13,7 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "express": "4.13.3"
+    "express": "4.13.3",
+    "mongodb": "^2.2.30"
   },
   "devDependencies": {
     "babel": "5.8.29",
