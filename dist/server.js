@@ -6,29 +6,72 @@ var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
 
-var _routesMainRoutes = require('./routes/main.routes');
+var _bodyParser = require('body-parser');
 
-var _routesMainRoutes2 = _interopRequireDefault(_routesMainRoutes);
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-// consts
+var _config = require('./config');
+
+var _config2 = _interopRequireDefault(_config);
+
 var app = (0, _express2['default'])();
-
 var PORT = process.env.PORT || 3001;
+
+var MongoClient = require('mongodb').MongoClient;
 
 // arrow functions
 var server = app.listen(PORT, function () {
-    console.log('Example app listening at http://localhost:' + PORT);
+    console.log('app listening at http://localhost:' + PORT);
 });
+
+app.use(_bodyParser2['default'].urlencoded({ extended: false }));
+app.use(_bodyParser2['default'].json());
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
-    // res.end('<p>hello world</p>');
 });
 
-app.get('/', function (req, res) {
-    res.send({ user: 'govnoed suka' });
+app.get('/getInitialData', function (req, res) {
+    MongoClient.connect(_config2['default'], function (err, db) {
+        if (err) {
+            return console.log('err', err);
+        }
+
+        var data = {};
+
+        var getUsers = new Promise(function (resolve) {
+            db.collection('users').find().toArray(function (err, results) {
+                data.users = results;
+                resolve();
+            });
+        });
+
+        var getDonations = new Promise(function (resolve) {
+            db.collection('donations').find().toArray(function (err, results) {
+                data.donations = results;
+                resolve();
+            });
+        });
+
+        var getEvents = new Promise(function (resolve) {
+            db.collection('events').find().toArray(function (err, results) {
+                data.events = results;
+                resolve();
+            });
+        });
+
+        Promise.all([getEvents, getUsers, getDonations]).then(function () {
+            res.send(data);
+            db.close();
+        });
+    });
+});
+
+app.post('/addevent', function (req, res) {
+    console.log('req', req.body);
+    res.send('post addevent');
 });
 //# sourceMappingURL=server.js.map
