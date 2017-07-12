@@ -1,4 +1,5 @@
 import express from 'express'
+import bodyParser from 'body-parser'
 import DB_URL from './config'
 
 const app = express();
@@ -11,12 +12,17 @@ const server = app.listen(PORT, () => {
   console.log(`app listening at http://localhost:${PORT}`);
 });
 
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
+
 
 app.get('/getInitialData', (req, res) => {
     MongoClient.connect(DB_URL, (err, db) => {
@@ -58,4 +64,7 @@ app.get('/getInitialData', (req, res) => {
     });
 });
 
-
+app.post('/addevent', (req, res) => {
+    console.log('req', req.body);
+    res.send('post addevent')
+});
