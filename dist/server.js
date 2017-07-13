@@ -24,12 +24,12 @@ var server = app.listen(PORT, function () {
     console.log('app listening at http://localhost:' + PORT);
 });
 
-app.use(_bodyParser2['default'].urlencoded({ extended: false }));
+app.use(_bodyParser2['default'].urlencoded({ extended: true }));
 app.use(_bodyParser2['default'].json());
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,post,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
 });
@@ -71,7 +71,10 @@ app.get('/getInitialData', function (req, res) {
 });
 
 app.post('/addevent', function (req, res) {
-    console.log('req', req.body);
-    res.send('post addevent');
+    MongoClient.connect(_config2['default'], function (err, db) {
+        db.collection('events').insertOne(req.body, function (err, docsInserted) {
+            res.send(docsInserted.insertedId);
+        });
+    });
 });
 //# sourceMappingURL=server.js.map

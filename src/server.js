@@ -66,6 +66,9 @@ app.get('/getInitialData', (req, res) => {
 
 
 app.post('/addevent', (req, res) => {
-    console.log('req', req.body);
-    res.send(req.body)
+    MongoClient.connect(DB_URL, (err, db) => {
+       db.collection('events').insertOne(req.body, function(err,docsInserted){
+            res.send(docsInserted.insertedId)
+       });
+    });
 });
