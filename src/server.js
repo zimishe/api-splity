@@ -72,3 +72,15 @@ app.post('/addevent', (req, res) => {
        });
     });
 });
+
+app.post('/register', (req, res) => {
+    console.log('req', req.body);
+
+    res.send(req.body);
+
+    MongoClient.connect(DB_URL, (err, db) => {
+       // db.collection('users').insertOne(req.body, function(err,docsInserted){
+       //      res.send(req)
+       // });
+    });
+});
