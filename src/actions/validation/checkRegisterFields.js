@@ -6,8 +6,18 @@ import { insertUser } from './../insertUser'
 
 export function checkRegisterFields(db, data, res) {
     let errors = [],
-        takenNameError = {user_name: 'Sorry, name is already taken'},
-        takenEmailError = {user_email: 'Email is already registered'};
+        takenNameError = {
+            field: 'user_name',
+            text: 'Sorry, name is already taken'
+        },
+        takenEmailError = {
+            field: 'user_email',
+            text: 'Email is already registered'
+        },
+        passwordMatchError = {
+            field: 'user_confirm_password',
+            text: "Passwords doesn't\ match"
+        };
     
     let checkName = new Promise((resolve) => {
         db.collection('users')
@@ -23,6 +33,8 @@ export function checkRegisterFields(db, data, res) {
                     (foundNames > 0) && errors.push(takenNameError);
                     (foundEmails > 0) && errors.push(takenEmailError);
                 }
+                
+                (data.user_password !== data.user_confirm_password) && errors.push(passwordMatchError);
 
                 resolve();
             });
@@ -32,7 +44,7 @@ export function checkRegisterFields(db, data, res) {
         if (errors.length > 0) {
             res.json({status: 0, errors: errors})   
         }   else {
-            insertUser(db, data, res);
+            insertUser(db, data, res, 1);
         }
     })
 }

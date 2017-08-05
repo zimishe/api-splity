@@ -2,7 +2,6 @@
  * Created by eugene on 07/11/17.
  */
 
-
 export function getUsers(db, res) {
     let data = {};
 

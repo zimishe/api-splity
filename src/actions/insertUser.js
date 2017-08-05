@@ -2,7 +2,7 @@
  * Created by eugene on 08/05/17.
  */
 
-export function insertUser(db, data, res) {
+export function insertUser(db, data, res, status) {
     db.collection('users').insertOne(
         {
             name: data.user_name,
@@ -10,6 +10,10 @@ export function insertUser(db, data, res) {
             email: data.user_email,
             password: data.user_password
         }, (err,docsInserted) => {
-             res.send(docsInserted.insertedId)
+             res.json({
+                 userID: docsInserted.insertedId,
+                 status: status
+             })
     });
 }
+
