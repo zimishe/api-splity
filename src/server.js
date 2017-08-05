@@ -5,6 +5,7 @@ import DB_URL from './config'
 import { getUsers } from './actions/getUsers'
 import { checkRegisterFields } from './actions/validation/checkRegisterFields'
 import { checkLoginFields } from './actions/validation/checkLoginFields'
+import { addDonation } from './actions/addDonation'
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -59,5 +60,13 @@ app.post('/login', (req, res) => {
 
     MongoClient.connect(DB_URL, (err, db) => {
         checkLoginFields(db, data, res);
+    });
+});
+
+app.post('/donate', (req, res) => {
+    let data = req.body;
+
+    MongoClient.connect(DB_URL, (err, db) => {
+        addDonation(db, data, res);
     });
 });
