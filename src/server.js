@@ -2,6 +2,9 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import DB_URL from './config'
 
+import { getUsers } from './actions/getUsers'
+import { checkRegisterFields } from './actions/validation/checkRegisterFields'
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -29,41 +32,9 @@ app.get('/getInitialData', (req, res) => {
             return console.log('err', err);
         }
         
-        let data = {};
-        
-        let getUsers = new Promise(resolve => {
-            db.collection('users').find().toArray((err, results) => {
-                data.users = results;
-                resolve();
-            });
-        });
-        
-        let getDonations = new Promise(resolve => {
-            db.collection('donations').find().toArray((err, results) => {
-                data.donations = results;
-                resolve();
-            });
-        });
-        
-        let getEvents = new Promise(resolve => {
-            db.collection('events').find().toArray((err, results) => {
-                data.events = results;
-                resolve();
-            });
-        });
-        
-        Promise.all([
-            getEvents,
-            getUsers,
-            getDonations
-        ]).then(() => {
-            res.send(data);
-            db.close();
-        })
+        getUsers(db, res);
     });
 });
-
-
 
 app.post('/addevent', (req, res) => {
     MongoClient.connect(DB_URL, (err, db) => {
@@ -73,14 +44,11 @@ app.post('/addevent', (req, res) => {
     });
 });
 
-app.post('/register', (req, res) => {
-    console.log('req', req.body);
 
-    res.send(req.body);
+app.post('/register', (req, res) => {
+    let data = req.body;
 
     MongoClient.connect(DB_URL, (err, db) => {
-       // db.collection('users').insertOne(req.body, function(err,docsInserted){
-       //      res.send(req)
-       // });
+        checkRegisterFields(db, data, res);
     });
 });
