@@ -5,17 +5,37 @@
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
-  value: true
+    value: true
 });
 exports.getUsers = getUsers;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+function getUsers(db, res) {
+    var data = {};
 
-var _config = require('./../config');
+    var getUsers = new Promise(function (resolve) {
+        db.collection('users').find().toArray(function (err, results) {
+            data.users = results;
+            resolve();
+        });
+    });
 
-var _config2 = _interopRequireDefault(_config);
+    var getDonations = new Promise(function (resolve) {
+        db.collection('donations').find().toArray(function (err, results) {
+            data.donations = results;
+            resolve();
+        });
+    });
 
-var MongoClient = require('mongodb').MongoClient;
+    var getEvents = new Promise(function (resolve) {
+        db.collection('events').find().toArray(function (err, results) {
+            data.events = results;
+            resolve();
+        });
+    });
 
-function getUsers() {}
+    Promise.all([getEvents, getUsers, getDonations]).then(function () {
+        res.send(data);
+        db.close();
+    });
+}
 //# sourceMappingURL=getUsers.js.map
