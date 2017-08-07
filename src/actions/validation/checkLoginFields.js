@@ -19,9 +19,6 @@ export function checkLoginFields(db, data, res) {
                 email: data.user_email
             })
             .toArray((err, results) => {
-                // let foundNames = results.filter(result => result.name === data.user_name).length,
-                    // foundEmails = results.filter(result => result.email === data.user_email).length;
-                
                 if (results.length < 1) {
                     errors.push(noEmailError);
                     resolve();

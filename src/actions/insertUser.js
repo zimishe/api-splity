@@ -11,6 +11,7 @@ export function insertUser(db, data, res, status) {
             password: data.user_password
         }, (err,docsInserted) => {
              res.json({
+                 userInfo: docsInserted.ops[0],
                  userID: docsInserted.insertedId,
                  status: status
              })

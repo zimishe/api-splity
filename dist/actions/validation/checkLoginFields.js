@@ -24,9 +24,6 @@ function checkLoginFields(db, data, res) {
         db.collection('users').find({
             email: data.user_email
         }).toArray(function (err, results) {
-            // let foundNames = results.filter(result => result.name === data.user_name).length,
-            // foundEmails = results.filter(result => result.email === data.user_email).length;
-
             if (results.length < 1) {
                 errors.push(noEmailError);
                 resolve();
