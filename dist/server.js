@@ -22,6 +22,8 @@ var _actionsValidationCheckLoginFields = require('./actions/validation/checkLogi
 
 var _actionsAddDonation = require('./actions/addDonation');
 
+var _actionsUpdateTotalAmount = require('./actions/updateTotalAmount');
+
 var app = (0, _express2['default'])();
 var PORT = process.env.PORT || 3001;
 
@@ -57,6 +59,14 @@ app.post('/addevent', function (req, res) {
         db.collection('events').insertOne(req.body, function (err, docsInserted) {
             res.send(docsInserted.insertedId);
         });
+    });
+});
+
+app.put('/updateEvent', function (req, res) {
+    var data = req.body;
+
+    MongoClient.connect(_config2['default'], function (err, db) {
+        (0, _actionsUpdateTotalAmount.updateTotalAmount)(data, db, res);
     });
 });
 

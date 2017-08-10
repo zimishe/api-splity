@@ -6,6 +6,7 @@ import { getUsers } from './actions/getUsers'
 import { checkRegisterFields } from './actions/validation/checkRegisterFields'
 import { checkLoginFields } from './actions/validation/checkLoginFields'
 import { addDonation } from './actions/addDonation'
+import { updateTotalAmount } from './actions/updateTotalAmount'
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -43,6 +44,14 @@ app.post('/addevent', (req, res) => {
        db.collection('events').insertOne(req.body, function(err,docsInserted){
             res.send(docsInserted.insertedId)
        });
+    });
+});
+
+app.put('/updateEvent', (req, res) => {
+    let data = req.body;
+    
+    MongoClient.connect(DB_URL, (err, db) => {
+        updateTotalAmount(data, db, res);
     });
 });
 
