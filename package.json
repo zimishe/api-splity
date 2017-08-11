@@ -17,7 +17,14 @@
     "express": "^4.15.3",
     "express-formidable": "^1.0.0",
     "http": "0.0.0",
-    "mongodb": "^2.2.30"
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.30",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.1.2",
+    "redux": "^3.7.2",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "babel": "5.8.29",

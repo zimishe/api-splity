@@ -24,6 +24,8 @@ var _actionsAddDonation = require('./actions/addDonation');
 
 var _actionsUpdateTotalAmount = require('./actions/updateTotalAmount');
 
+var _intialLoadActionsHandleRender = require('./intialLoad/actions/handleRender');
+
 var app = (0, _express2['default'])();
 var PORT = process.env.PORT || 3001;
 
@@ -42,6 +44,16 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,post,DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     next();
+});
+
+app.get('/', function (req, res) {
+    MongoClient.connect(_config2['default'], function (err, db) {
+        if (err) {
+            return console.log('err', err);
+        }
+
+        (0, _actionsGetUsers.getUsers)(req, db, res);
+    });
 });
 
 app.get('/getInitialData', function (req, res) {

@@ -2,26 +2,28 @@
  * Created by eugene on 07/11/17.
  */
 
-export function getUsers(db, res) {
-    let data = {};
+import { handleRender } from '../intialLoad/actions/handleRender'
+
+export function getUsers(req, db, res) {
+    let initialState = {};
 
     let getUsers = new Promise(resolve => {
         db.collection('users').find().toArray((err, results) => {
-            data.users = results;
+            initialState.users = results;
             resolve();
         });
     });
 
     let getDonations = new Promise(resolve => {
         db.collection('donations').find().toArray((err, results) => {
-            data.donations = results;
+            initialState.donations = results;
             resolve();
         });
     });
 
     let getEvents = new Promise(resolve => {
         db.collection('events').find().toArray((err, results) => {
-            data.events = results;
+            initialState.events = results;
             resolve();
         });
     });
@@ -31,10 +33,14 @@ export function getUsers(db, res) {
         getUsers,
         getDonations
     ]).then(() => {
-        res.send(data);
+        initialState.pickedUsers = [];
+        initialState.loggedUserInfo = [];
+        
+        handleRender(req, res, initialState);
         db.close();
     })
 }
+
 
 
 

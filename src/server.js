@@ -29,6 +29,16 @@ app.use((req, res, next) => {
 });
 
 
+app.get('/', (req, res) => {
+    MongoClient.connect(DB_URL, (err, db) => {
+        if (err) {
+            return console.log('err', err);
+        }
+        
+        getUsers(req, db, res);
+    });
+});
+
 app.get('/getInitialData', (req, res) => {
     MongoClient.connect(DB_URL, (err, db) => {
         if (err) {

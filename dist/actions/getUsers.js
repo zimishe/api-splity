@@ -9,32 +9,37 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.getUsers = getUsers;
 
-function getUsers(db, res) {
-    var data = {};
+var _intialLoadActionsHandleRender = require('./../intialLoad/actions/handleRender');
+
+function getUsers(req, db, res) {
+    var initialState = {};
 
     var getUsers = new Promise(function (resolve) {
         db.collection('users').find().toArray(function (err, results) {
-            data.users = results;
+            initialState.users = results;
             resolve();
         });
     });
 
     var getDonations = new Promise(function (resolve) {
         db.collection('donations').find().toArray(function (err, results) {
-            data.donations = results;
+            initialState.donations = results;
             resolve();
         });
     });
 
     var getEvents = new Promise(function (resolve) {
         db.collection('events').find().toArray(function (err, results) {
-            data.events = results;
+            initialState.events = results;
             resolve();
         });
     });
 
     Promise.all([getEvents, getUsers, getDonations]).then(function () {
-        res.send(data);
+        initialState.pickedUsers = [];
+        initialState.loggedUserInfo = [];
+
+        (0, _intialLoadActionsHandleRender.handleRender)(req, res, initialState);
         db.close();
     });
 }
