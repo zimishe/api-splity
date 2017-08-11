@@ -5,6 +5,7 @@ import store from './../../store/store'
 
 import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
+import Login from "../authorization/login";
 
 
 const mapStateToProps = function () {
@@ -19,23 +20,15 @@ class TopPanel extends Component {
     }
 
     render() {
-        
         return(
             <div className="top-panel">
                 <div className="auth__toggle">
                     LOGIN / REGISTER
                 </div>
-                <div className="auth">
-                    <ul className="auth__tabs__controls">
-                        <li className="auth__tab__control auth__tab__control--active">Register</li>
-                    </ul>
-                    <div className="auth__tabs">
-                        <Registration />
-                    </div>
-                </div>
                 <Link to="/cabinet" className="personal-cab">User cabinet</Link>
             </div>
         )
+        
     }
 }
 

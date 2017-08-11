@@ -20,13 +20,17 @@ export function handleRender(req, res, initialState) {
             <PageRouter />
         </Provider>
     );
-    
 
     // Grab the initial state from our Redux store
     const preloadedState = store.getState();
 
     // Send the rendered page back to the client
-    res.send(renderFullPage(html, preloadedState));
+    let dataToSend = {
+        page: renderFullPage(html, preloadedState),
+        storage: preloadedState
+    };
+    
+    res.send(dataToSend);
 }
 
 function renderFullPage(html, preloadedState) {
